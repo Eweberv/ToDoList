@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TextField, Button, List, ListItem, ListItemText, IconButton, Checkbox, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -8,13 +9,26 @@ import SaveIcon from '@mui/icons-material/Save';
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
     const [newTodo, setNewTodo] = useState('');
-    const [editingTodoId, setEditingTodoId] = useState(null); // ID de la tâche en cours d'édition
-    const [editingTitle, setEditingTitle] = useState(''); // Nouveau titre temporaire
+    const [editingTodoId, setEditingTodoId] = useState(null);
+    const [editingTitle, setEditingTitle] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            console.log('No user connected');
+            return;
+        }
+
         const fetchTodos = async () => {
             try {
-                const response = await axios.get('http://localhost:5220/api/TodoList', { headers: {Accept: "application/json"}});
+                const response = await axios.get('http://localhost:5220/api/TodoList/myToDos', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        Accept: "application/json"
+                    }
+                });
                 setTodos(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
                 console.error('Error fetching todos:', error);
@@ -23,18 +37,24 @@ const TodoList = () => {
         };
 
         fetchTodos();
-    }, []);
+    }, [navigate]);
 
     const handleAddTodo = async () => {
         if (newTodo.trim() === '') return;
 
+        const token = localStorage.getItem('token');
+
         const todo = {
             title: newTodo,
-            isCompleted: false,
         };
 
         try {
-            const response = await axios.post('http://localhost:5220/api/TodoList', todo);
+            const response = await axios.post('http://localhost:5220/api/TodoList', todo, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
             setTodos([...todos, response.data]);
             setNewTodo('');
         } catch (error) {
@@ -43,13 +63,16 @@ const TodoList = () => {
     };
 
     const handleToggleComplete = async (id) => {
+        const token = localStorage.getItem('token');
         const todo = todos.find(todo => todo.id === id);
         if (!todo) return;
 
         const updatedTodo = { ...todo, isCompleted: !todo.isCompleted };
 
         try {
-            await axios.put(`http://localhost:5220/api/TodoList/${id}`, updatedTodo);
+            await axios.put(`http://localhost:5220/api/TodoList/${id}`, updatedTodo, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             setTodos(todos.map(todo =>
                 todo.id === id ? updatedTodo : todo
             ));
@@ -59,8 +82,11 @@ const TodoList = () => {
     };
 
     const handleDeleteTodo = async (id) => {
+        const token = localStorage.getItem('token');
         try {
-            await axios.delete(`http://localhost:5220/api/TodoList/${id}`);
+            await axios.delete(`http://localhost:5220/api/TodoList/${id}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             setTodos(todos.filter(todo => todo.id !== id));
         } catch (error) {
             console.error('Error deleting todo:', error);
@@ -73,8 +99,11 @@ const TodoList = () => {
     };
 
     const handleSaveEdit = async (id) => {
+        const token = localStorage.getItem('token');
         try {
-            await axios.put(`http://localhost:5220/api/TodoList/${id}`, { title: editingTitle });
+            await axios.put(`http://localhost:5220/api/TodoList/${id}`, { title: editingTitle }, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             setTodos(todos.map(todo =>
                 todo.id === id ? { ...todo, title: editingTitle } : todo
             ));

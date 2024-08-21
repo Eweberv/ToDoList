@@ -1,16 +1,33 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { TextField, Button, Box, Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleRegister = () => {
-        console.log({ email, password });
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('http://localhost:5220/api/Auth/login', {
+                email,
+                password
+            });
+
+            localStorage.setItem('token', response.data.token);
+            console.log('Login successful:', response.data);
+            console.log('JWT:', response.data.token);
+
+
+            navigate('/');
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
     };
 
     return (
-        <Box display={"flex"} justifyContent={"center"} alignItems={"center"} flexDirection={"column"} style={{ }}>
+        <Box display={"flex"} justifyContent={"center"} alignItems={"center"} flexDirection={"column"}>
             <Box width={"500px"}>
                 <h2>Login</h2>
                 <TextField
@@ -33,10 +50,10 @@ const Login = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleRegister}
+                    onClick={handleLogin}
                     fullWidth
                 >
-                    Register
+                    Login
                 </Button>
                 <Box mt={2}>
                     <Link href="/reset-password" variant="body2">

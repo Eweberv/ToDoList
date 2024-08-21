@@ -1,18 +1,33 @@
 import { useState } from 'react';
-import { TextField, Button, Box, Link } from '@mui/material';
+import axios from 'axios';
+import { TextField, Button, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+    const navigate = useNavigate();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleRegister = () => {
-        console.log({ firstName, lastName, email, password });
+    const handleRegister = async () => {
+        try {
+            const response = await axios.post('http://localhost:5220/api/Auth/register', {
+                firstName,
+                lastName,
+                email,
+                password
+            });
+            console.log('Registration successful:', response.data);
+
+            navigate('/login');
+        } catch (error) {
+            console.error('Error during registration:', error);
+        }
     };
 
     return (
-        <Box display={"flex"} justifyContent={"center"} alignItems={"center"} flexDirection={"column"} style={{ }}>
+        <Box display={"flex"} justifyContent={"center"} alignItems={"center"} flexDirection={"column"}>
             <Box width={"500px"}>
                 <h2>Register</h2>
                 <TextField

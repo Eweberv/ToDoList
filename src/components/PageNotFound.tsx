@@ -1,8 +1,10 @@
+import {Box} from "@mui/material";
+
 function PageNotFound() {
     return (
-        <div>
+        <Box display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"}>
             Page not found
-        </div>
+        </Box>
     )
 }
 
