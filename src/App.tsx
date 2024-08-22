@@ -1,8 +1,6 @@
-import { useState } from 'react'
 import './App.css'
 import TodoList from "./components/TodoList.tsx";
 import {Box, Typography} from "@mui/material";
-import Navbar from "./components/Navbar.tsx";
 
 function App() {
     return (

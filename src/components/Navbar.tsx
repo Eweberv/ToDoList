@@ -14,7 +14,7 @@ const Navbar = () => {
         }
     }, [token]);
 
-    const handleClick = (route) => {
+    const handleClick = (route: string) => {
         navigate(route);
     };
 

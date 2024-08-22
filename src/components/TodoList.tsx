@@ -6,11 +6,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 
+interface Todo {
+    id: number;
+    title: string;
+    isCompleted: boolean;
+}
+
 const TodoList = () => {
-    const [todos, setTodos] = useState([]);
-    const [newTodo, setNewTodo] = useState('');
-    const [editingTodoId, setEditingTodoId] = useState(null);
-    const [editingTitle, setEditingTitle] = useState('');
+    const [todos, setTodos] = useState<Todo[]>([]);
+    const [newTodo, setNewTodo] = useState<string>('');
+    const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
+    const [editingTitle, setEditingTitle] = useState<string>('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -62,7 +68,7 @@ const TodoList = () => {
         }
     };
 
-    const handleToggleComplete = async (id) => {
+    const handleToggleComplete = async (id: number) => {
         const token = localStorage.getItem('token');
         const todo = todos.find(todo => todo.id === id);
         if (!todo) return;
@@ -81,7 +87,7 @@ const TodoList = () => {
         }
     };
 
-    const handleDeleteTodo = async (id) => {
+    const handleDeleteTodo = async (id: number) => {
         const token = localStorage.getItem('token');
         try {
             await axios.delete(`http://localhost:5220/api/TodoList/${id}`, {
@@ -93,12 +99,12 @@ const TodoList = () => {
         }
     };
 
-    const handleEditTodo = (id, title) => {
+    const handleEditTodo = (id: number, title: string) => {
         setEditingTodoId(id);
         setEditingTitle(title);
     };
 
-    const handleSaveEdit = async (id) => {
+    const handleSaveEdit = async (id: number) => {
         const token = localStorage.getItem('token');
         try {
             await axios.put(`http://localhost:5220/api/TodoList/${id}`, { title: editingTitle }, {
