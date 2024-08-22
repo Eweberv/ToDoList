@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { TextField, Button, List, ListItem, ListItemText, IconButton, Checkbox, Box } from '@mui/material';
+import {TextField, Button, List, ListItem, ListItemText, IconButton, Checkbox, Box, Typography} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -18,6 +18,14 @@ const TodoList = () => {
     const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
     const [editingTitle, setEditingTitle] = useState<string>('');
     const navigate = useNavigate();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (token) {
+            setIsAuthenticated(true);
+        }
+    }, [token]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -122,22 +130,31 @@ const TodoList = () => {
     return (
         <Box display={"flex"} justifyContent={"center"} alignItems={"center"} flexDirection={"column"}>
             <h2>ToDo List</h2>
-            <TextField
-                label="New Task"
-                variant="outlined"
-                fullWidth
-                value={newTodo}
-                onChange={(e) => setNewTodo(e.target.value)}
-            />
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleAddTodo}
-                style={{ marginTop: 10, marginBottom: 20 }}
-                fullWidth
-            >
-                Add Task
-            </Button>
+
+            {isAuthenticated ?
+                <Box>
+                    <TextField
+                        label="New Task"
+                        variant="outlined"
+                        fullWidth
+                        value={newTodo}
+                        onChange={(e) => setNewTodo(e.target.value)}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleAddTodo}
+                        style={{ marginTop: 10, marginBottom: 20 }}
+                        fullWidth
+                    >
+                        Add Task
+                    </Button>
+                </Box>
+                :
+                <Typography variant="h4" sx={{margin: "10px"}}>
+                    Login to create a ToDo List
+                </Typography>
+            }
             <List style={{ width: '100%' }}>
                 {todos.map((todo) => (
                     <ListItem
