@@ -10,7 +10,7 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post('https://54.154.137.58:5220/api/Auth/login', {
+            const response = await axios.post('http://54.246.1.86:5220/api/Auth/login', {
                 email,
                 password
             });
