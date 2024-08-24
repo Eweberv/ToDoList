@@ -12,7 +12,7 @@ const Register = () => {
 
     const handleRegister = async () => {
         try {
-            const response = await axios.post('https://54.73.88.243:5220/api/Auth/register', {
+            const response = await axios.post('https://54.73.88.243/api/Auth/register', {
                 firstName,
                 lastName,
                 email,
