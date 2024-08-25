@@ -37,7 +37,7 @@ const TodoList = () => {
 
         const fetchTodos = async () => {
             try {
-                const response = await axios.get('http://localhost:5220/api/TodoList/myToDos', {
+                const response = await axios.get('https://api.todolist.victorweber.fr/api/TodoList/myToDos', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         Accept: "application/json"
@@ -63,7 +63,7 @@ const TodoList = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:5220/api/TodoList', todo, {
+            const response = await axios.post('https://api.todolist.victorweber.fr/api/TodoList', todo, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ const TodoList = () => {
         const updatedTodo = { ...todo, isCompleted: !todo.isCompleted };
 
         try {
-            await axios.put(`http://localhost:5220/api/TodoList/${id}`, updatedTodo, {
+            await axios.put(`https://api.todolist.victorweber.fr/api/TodoList/${id}`, updatedTodo, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setTodos(todos.map(todo =>
@@ -98,7 +98,7 @@ const TodoList = () => {
     const handleDeleteTodo = async (id: number) => {
         const token = localStorage.getItem('token');
         try {
-            await axios.delete(`http://localhost:5220/api/TodoList/${id}`, {
+            await axios.delete(`https://api.todolist.victorweber.fr/api/TodoList/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setTodos(todos.filter(todo => todo.id !== id));
@@ -115,7 +115,7 @@ const TodoList = () => {
     const handleSaveEdit = async (id: number) => {
         const token = localStorage.getItem('token');
         try {
-            await axios.put(`http://localhost:5220/api/TodoList/${id}`, { title: editingTitle }, {
+            await axios.put(`https://api.todolist.victorweber.fr/api/TodoList/${id}`, { title: editingTitle }, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setTodos(todos.map(todo =>
