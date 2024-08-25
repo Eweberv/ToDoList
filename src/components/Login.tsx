@@ -10,7 +10,7 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post('https://54.73.88.243/api/Auth/login', {
+            const response = await axios.post('https://api.todolist.victorweber.fr/api/Auth/login', {
                 email,
                 password
             });
