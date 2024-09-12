@@ -37,7 +37,7 @@ const Navbar = () => {
             zIndex: -1,
             borderBottom: "1px solid #0d0d28"
         }}>
-            <img src={ToDoListLogo} alt={"ToDoList logo"} style={{ marginLeft: '10px', height: '6rem' }}></img>
+            <img src={ToDoListLogo} alt={"ToDoList logo"} style={{ marginLeft: '10px', height: '6rem' }} onClick={() => {navigate('/')}}></img>
             <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center" gap={3.5} sx={{ marginRight: '50px' }}>
                 {isAuthenticated ? (
                     <Button variant="contained" onClick={handleLogout}>Disconnect</Button>

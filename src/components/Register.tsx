@@ -12,7 +12,7 @@ const Register = () => {
 
     const handleRegister = async () => {
         try {
-            const response = await axios.post('https://api.todolist.victorweber.fr/api/Auth/register', {
+            const response = await axios.post(`${import.meta.env.VITE_TODOLIST_API_ENDPOINT}/api/Auth/register`, {
                 firstName,
                 lastName,
                 email,
